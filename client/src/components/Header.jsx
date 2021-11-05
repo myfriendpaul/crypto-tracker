@@ -8,9 +8,10 @@ import {
   ThemeProvider,
   makeStyles,
   createTheme,
-  Them,
+  Theme,
 } from "@material-ui/core";
 import { useNavigate } from "react-router-dom";
+import { CryptoState } from "../CryptoContext";
 
 const Header = () => {
   const useStyles = makeStyles(() => ({
@@ -25,6 +26,8 @@ const Header = () => {
 
   const classes = useStyles();
   const navigate = useNavigate();
+  const { currency, setCurrency } = CryptoState();
+  console.log(currency);
   const darkTheme = createTheme({
     palette: {
       primary: {
@@ -43,8 +46,10 @@ const Header = () => {
               className={classes.title}
               variant="h6"
             >
-              Crypto Hunter
+              Cryptonite
             </Typography>
+            {/* Passing state from CryptoContext and setting state based on which
+            item is selected */}
             <Select
               variant="outlined"
               style={{
@@ -52,6 +57,8 @@ const Header = () => {
                 height: 40,
                 marginRight: 15,
               }}
+              value={currency}
+              onChange={(e) => setCurrency(e.target.value)}
             >
               <MenuItem value={"USD"}>USD</MenuItem>
               <MenuItem value={"MXN"}>MXN</MenuItem>
