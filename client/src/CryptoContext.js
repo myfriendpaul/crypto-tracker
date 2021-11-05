@@ -2,15 +2,15 @@ import { createContext, useContext, useState, useEffect } from "react";
 
 const Crypto = createContext();
 const CryptoContext = ({ children }) => {
-  const [currency, setCurrency] = useState("MXN");
-  const [symbol, setSymbol] = useState("MX$");
+  const [currency, setCurrency] = useState("USD");
+  const [symbol, setSymbol] = useState("$");
 
   //Since this will run everytime the currency is changed, we add currency as a dependency
   useEffect(() => {
-    if (currency === "MXN") {
-      setSymbol("MX$");
-    } else if (currency === "USD") {
+    if (currency === "USD") {
       setSymbol("$");
+    } else if (currency === "MXN") {
+      setSymbol("MX$");
     }
   }, [currency]);
   return (

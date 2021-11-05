@@ -1,5 +1,7 @@
 import { makeStyles } from "@material-ui/core";
 import { Container, Typography } from "@material-ui/core";
+import Carousel from "./Carousel";
+
 const useStyles = makeStyles(() => ({
   banner: {
     backgroundImage: "url(./banner.jpg)",
@@ -49,6 +51,7 @@ const Banner = () => {
             Changing the Way you track Cryptocurrency
           </Typography>
         </div>
+        <Carousel />
       </Container>
     </div>
   );

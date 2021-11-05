@@ -11,7 +11,7 @@ import {
   Theme,
 } from "@material-ui/core";
 import { useNavigate } from "react-router-dom";
-import { CryptoState } from "../CryptoContext";
+import { CryptoState } from "../../CryptoContext";
 
 const Header = () => {
   const useStyles = makeStyles(() => ({
