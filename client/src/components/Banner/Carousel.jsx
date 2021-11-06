@@ -37,7 +37,6 @@ const Carousel = () => {
     const getTrendingCoins = async () => {
       const { data } = await axios.get(TrendingCoins(currency));
       setTrending(data);
-      console.log(trending);
     };
     getTrendingCoins();
   }, [currency]);
