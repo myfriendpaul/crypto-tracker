@@ -12,6 +12,14 @@ const useStyles = makeStyles(() => ({
     display: "flex",
     alignItems: "center",
   },
+  carouselItem: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    cursor: "pointer",
+    textTransform: "uppercase",
+    color: "white",
+  },
 }));
 
 //Stack overflow link for this function https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
@@ -24,6 +32,7 @@ const Carousel = () => {
   const { currency, symbol } = CryptoState();
   const classes = useStyles();
 
+  //Destructuring data using {data} or else we would have to do data.data from the API
   useEffect(() => {
     const getTrendingCoins = async () => {
       const { data } = await axios.get(TrendingCoins(currency));
@@ -47,7 +56,12 @@ const Carousel = () => {
         <span>
           {coin?.symbol}
           &nbsp;
-          <span>
+          <span
+            style={{
+              color: profit > 0 ? "rgb(14, 203, 129)" : "red",
+              fontWeight: 500,
+            }}
+          >
             {profit && "+"} {coin?.price_change_percentage_24h?.toFixed(2)}%
           </span>
         </span>
