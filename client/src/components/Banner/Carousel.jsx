@@ -5,7 +5,7 @@ import { CryptoState } from "../../CryptoContext";
 import { TrendingCoins } from "../../config/api";
 import AliceCarousel from "react-alice-carousel";
 import { Link } from "react-router-dom";
-
+import { numberWithCommas } from "../CoinsTable/CoinsTable";
 const useStyles = makeStyles(() => ({
   carousel: {
     height: "50%",
@@ -21,11 +21,6 @@ const useStyles = makeStyles(() => ({
     color: "white",
   },
 }));
-
-//Stack overflow link for this function https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
-export function numberWithCommas(x) {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
 
 const Carousel = () => {
   const [trending, setTrending] = useState([]);

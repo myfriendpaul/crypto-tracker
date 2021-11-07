@@ -3,15 +3,22 @@ import { useState, useEffect } from "react";
 import { CryptoState } from "../CryptoContext";
 import { SingleCoin } from "../config/api";
 import axios from "axios";
-import { LinearProgress, makeStyles, Typography } from "@material-ui/core";
+import {
+  Button,
+  LinearProgress,
+  makeStyles,
+  Typography,
+} from "@material-ui/core";
 import CoinInfo from "../components/CoinInfo/CoinInfo";
 import ReactHtmlParser from "react-html-parser";
-import { numberWithCommas } from "../components/Banner/Carousel";
+import { numberWithCommas } from "../components/CoinsTable/CoinsTable";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../firebase";
 
 const CoinPage = () => {
   const { id } = useParams();
   const [coin, setCoin] = useState();
-  const { currency, symbol } = CryptoState();
+  const { currency, symbol, user, watchlist, setAlert } = CryptoState();
 
   useEffect(() => {
     const getCoin = async () => {
@@ -55,24 +62,33 @@ const CoinPage = () => {
       textAlign: "justify",
     },
     marketData: {
-      alignSelf: "start",
+      justifyContent: "center",
       padding: 25,
       paddingTop: 10,
-      width: "%",
+      width: "100%",
       [theme.breakpoints.down("md")]: {
         display: "flex",
-        justifyContent: "space-around",
-      },
-      [theme.breakpoints.down("sm")]: {
         flexDirection: "column",
         alignItems: "center",
-      },
-      [theme.breakpoints.down("xs")]: {
-        alignItems: "start",
       },
     },
   }));
   const classes = useStyles();
+
+  const inWatchlist = watchlist.includes(coin?.id);
+  const addToWatchlist = async () => {
+    const coinRef = doc(db, "watchlist", user.uid);
+    try {
+      await setDoc(coinRef, {
+        coins: watchlist ? [...watchlist, coin?.id] : [coin?.id],
+      });
+      setAlert({
+        open: true,
+        message: `${coin.name} added to your watchlist!`,
+        type: "success",
+      });
+    } catch (error) {}
+  };
 
   if (!coin) return <LinearProgress style={{ backgroundColor: "gold" }} />;
 
@@ -143,6 +159,19 @@ const CoinPage = () => {
               M
             </Typography>
           </span>
+          {user && (
+            <Button
+              variant="outline"
+              style={{
+                width: "90%",
+                height: 40,
+                backgroundColor: "#EEBC1D",
+              }}
+              onClick={addToWatchlist}
+            >
+              {inWatchlist ? "Remove from watchlist" : "Add to Watchlist"}
+            </Button>
+          )}
         </div>
       </div>
       <CoinInfo coin={coin} />

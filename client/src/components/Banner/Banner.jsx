@@ -48,7 +48,7 @@ const Banner = () => {
               fontFamily: "Montserrat",
             }}
           >
-            Changing the Way you track Cryptocurrency
+            Changing the way you track Cryptocurrency
           </Typography>
         </div>
         <Carousel />

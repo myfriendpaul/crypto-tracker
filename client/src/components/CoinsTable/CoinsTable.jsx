@@ -18,8 +18,13 @@ import {
   TableBody,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
-import { numberWithCommas } from "../Banner/Carousel";
+// import { numberWithCommas } from "../Banner/Carousel";
 import { Pagination } from "@material-ui/lab";
+
+//Stack overflow link for this function https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
+export function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
 const CoinsTable = () => {
   const [search, setSearch] = useState("");
@@ -99,7 +104,7 @@ const CoinsTable = () => {
                             fontFamily: "Montserrat",
                           }}
                           key={head}
-                          align={head === "Coin" ? "" : "right"}
+                          align={head === "Coin" ? "left" : "right"}
                         >
                           {head}
                         </TableCell>
