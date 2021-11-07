@@ -11,6 +11,7 @@ import {
 } from "@material-ui/core";
 import { useNavigate } from "react-router-dom";
 import { CryptoState } from "../../CryptoContext";
+import AuthModal from "../Authentication/AuthModal";
 
 const useStyles = makeStyles(() => ({
   title: {
@@ -73,6 +74,7 @@ const Header = () => {
                 MXN
               </MenuItem>
             </Select>
+            <AuthModal />
           </Toolbar>
         </Container>
       </AppBar>
