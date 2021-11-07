@@ -7,7 +7,9 @@ import { Avatar } from "@material-ui/core";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase";
 import { numberWithCommas } from "../CoinsTable/CoinsTable";
-
+import { AiFillDelete } from "react-icons/ai";
+import { doc, setDoc } from "@firebase/firestore";
+import { db } from "../../firebase";
 const useStyles = makeStyles({
   container: {
     width: 350,
@@ -15,7 +17,7 @@ const useStyles = makeStyles({
     height: "100%",
     display: "flex",
     flexDirection: "column",
-    fontFamily: "Montserrat",
+    fontFamily: "monospace",
     backgroundColor: "#4D4B4D",
   },
   profile: {
@@ -26,6 +28,12 @@ const useStyles = makeStyles({
     gap: "20px",
     height: "92%",
   },
+  logout: {
+    height: "8%",
+    width: "100%",
+    backgroundColor: "#EEBC1D",
+    marginTop: 20,
+  },
   picture: {
     width: 200,
     height: 200,
@@ -33,23 +41,30 @@ const useStyles = makeStyles({
     backgroundColor: "#EEBC1D",
     objectFit: "contain",
   },
-  logout: {
-    height: "8%",
-    width: "100%",
-    backgroundColor: "#EEBC1D",
-    marginTop: 20,
-  },
   watchlist: {
     flex: 1,
     width: "100%",
     backgroundColor: "grey",
-    borderRadius: 5,
+    borderRadius: 10,
+    padding: 15,
     paddingTop: 10,
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     gap: 12,
     overflowY: "scroll",
+    overflowX: "hidden",
+  },
+  coin: {
+    padding: 10,
+    borderRadius: 5,
+    color: "black",
+    width: "100%",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#EEBC1D",
+    boxShadow: "3px 3px 8px #C2C2C2",
   },
 });
 export default function UserSidebar() {
@@ -68,6 +83,30 @@ export default function UserSidebar() {
     }
 
     setState({ ...state, [anchor]: open });
+  };
+
+  const removeFromWatchlist = async (coin) => {
+    const coinRef = doc(db, "watchlist", user.uid);
+    try {
+      await setDoc(
+        coinRef,
+        {
+          coins: watchlist.filter((watch) => watch !== coin?.id),
+        },
+        { merge: "true" }
+      );
+      setAlert({
+        open: true,
+        message: `${coin.name} removed from your watchlist!`,
+        type: "success",
+      });
+    } catch (error) {
+      setAlert({
+        open: true,
+        message: error.message,
+        type: "error",
+      });
+    }
   };
 
   const logout = () => {
@@ -120,7 +159,7 @@ export default function UserSidebar() {
                   {user.displayName || user.email}
                 </span>
                 <div className={classes.watchlist}>
-                  <span style={{ fontSize: 15, textShadow: "0 0 5px black" }}>
+                  <span style={{ fontSize: 18, fontWeight: "bold" }}>
                     Watchlist
                   </span>
                   {coins.map((coin) => {
@@ -131,6 +170,11 @@ export default function UserSidebar() {
                           <span style={{ display: "flex", gap: 8 }}>
                             {symbol}
                             {numberWithCommas(coin.current_price.toFixed(2))}
+                            <AiFillDelete
+                              style={{ cursor: "pointer" }}
+                              fontSize="16"
+                              onClick={() => removeFromWatchlist(coin)}
+                            />
                           </span>
                         </div>
                       );
