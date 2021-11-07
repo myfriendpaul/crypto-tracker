@@ -6,6 +6,7 @@ import { CryptoState } from "../../CryptoContext";
 import { Avatar } from "@material-ui/core";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase";
+import { numberWithCommas } from "../CoinsTable/CoinsTable";
 
 const useStyles = makeStyles({
   container: {
@@ -56,7 +57,7 @@ export default function UserSidebar() {
   const [state, setState] = React.useState({
     right: false,
   });
-  const { user, setAlert } = CryptoState();
+  const { user, setAlert, watchlist, coins, symbol } = CryptoState();
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
@@ -122,6 +123,18 @@ export default function UserSidebar() {
                   <span style={{ fontSize: 15, textShadow: "0 0 5px black" }}>
                     Watchlist
                   </span>
+                  {coins.map((coin) => {
+                    if (watchlist.includes(coin.id))
+                      return (
+                        <div className={classes.coin}>
+                          <span>{coin.name}</span>
+                          <span style={{ display: "flex", gap: 8 }}>
+                            {symbol}
+                            {numberWithCommas(coin.current_price.toFixed(2))}
+                          </span>
+                        </div>
+                      );
+                  })}
                 </div>
               </div>
               <Button

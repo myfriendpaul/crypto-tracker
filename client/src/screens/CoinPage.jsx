@@ -76,6 +76,7 @@ const CoinPage = () => {
   const classes = useStyles();
 
   const inWatchlist = watchlist.includes(coin?.id);
+
   const addToWatchlist = async () => {
     const coinRef = doc(db, "watchlist", user.uid);
     try {
@@ -87,7 +88,37 @@ const CoinPage = () => {
         message: `${coin.name} added to your watchlist!`,
         type: "success",
       });
-    } catch (error) {}
+    } catch (error) {
+      setAlert({
+        open: true,
+        message: error.message,
+        type: "error",
+      });
+    }
+  };
+
+  const removeFromWatchlist = async () => {
+    const coinRef = doc(db, "watchlist", user.uid);
+    try {
+      await setDoc(
+        coinRef,
+        {
+          coins: watchlist.filter((watch) => watch !== coin?.id),
+        },
+        { merge: "true" }
+      );
+      setAlert({
+        open: true,
+        message: `${coin.name} removed from your watchlist!`,
+        type: "success",
+      });
+    } catch (error) {
+      setAlert({
+        open: true,
+        message: error.message,
+        type: "error",
+      });
+    }
   };
 
   if (!coin) return <LinearProgress style={{ backgroundColor: "gold" }} />;
@@ -165,9 +196,9 @@ const CoinPage = () => {
               style={{
                 width: "90%",
                 height: 40,
-                backgroundColor: "#EEBC1D",
+                backgroundColor: inWatchlist ? "#FF0000" : "#EEBC1D",
               }}
-              onClick={addToWatchlist}
+              onClick={inWatchlist ? removeFromWatchlist : addToWatchlist}
             >
               {inWatchlist ? "Remove from watchlist" : "Add to Watchlist"}
             </Button>
