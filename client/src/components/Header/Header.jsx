@@ -20,6 +20,9 @@ const useStyles = makeStyles(() => ({
     fontWeight: "bold",
     cursor: "pointer",
   },
+  root: {
+    fontFamily: "Montserrat",
+  },
 }));
 
 const darkTheme = createTheme({
@@ -28,6 +31,9 @@ const darkTheme = createTheme({
       main: "#fff",
     },
     type: "dark",
+  },
+  typography: {
+    fontFamily: "Montserrat",
   },
 });
 
@@ -55,12 +61,17 @@ const Header = () => {
                 width: 100,
                 height: 40,
                 marginRight: 15,
+                fontFamily: "Montserrat",
               }}
               value={currency}
               onChange={(e) => setCurrency(e.target.value)}
             >
-              <MenuItem value={"USD"}>USD</MenuItem>
-              <MenuItem value={"MXN"}>MXN</MenuItem>
+              <MenuItem className={classes.root} value={"USD"}>
+                USD
+              </MenuItem>
+              <MenuItem className={classes.root} value={"MXN"}>
+                MXN
+              </MenuItem>
             </Select>
           </Toolbar>
         </Container>
